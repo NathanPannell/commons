@@ -24,11 +24,17 @@ export default {
           700: 'var(--color-primary-700)',
           800: 'var(--color-primary-800)',
           900: 'var(--color-primary-900)',
+          950: 'var(--color-primary-950)',
         },
         error: {
           50:  'var(--color-error-50)',
           100: 'var(--color-error-100)',
           700: 'var(--color-error-700)',
+        },
+        success: {
+          50:  'var(--color-success-50)',
+          500: 'var(--color-success-500)',
+          700: 'var(--color-success-700)',
         },
       },
       fontFamily: {
@@ -45,6 +51,7 @@ export default {
         '2xl': ['var(--text-2xl)', { lineHeight: 'var(--leading-2xl)' }],
         '3xl': ['var(--text-3xl)', { lineHeight: 'var(--leading-3xl)' }],
         '4xl': ['var(--text-4xl)', { lineHeight: 'var(--leading-4xl)' }],
+        '5xl': ['var(--text-5xl)', { lineHeight: 'var(--leading-5xl)' }],
       },
       borderRadius: {
         DEFAULT: '8px',
@@ -53,12 +60,24 @@ export default {
         lg:    '12px',
         xl:    '16px',
         '2xl': '20px',
+        '3xl': '24px',
         full:  '9999px',
       },
       boxShadow: {
         card:     '0 1px 3px 0 rgba(28,25,23,0.06), 0 1px 2px -1px rgba(28,25,23,0.04)',
         elevated: '0 4px 12px 0 rgba(28,25,23,0.08), 0 2px 4px -1px rgba(28,25,23,0.04)',
-        modal:    '0 16px 48px 0 rgba(28,25,23,0.12), 0 4px 12px -2px rgba(28,25,23,0.06)',
+        modal:    '0 25px 50px -12px rgba(28,25,23,0.15)',
+        glass:    '0 8px 32px 0 rgba(28,25,23,0.06)',
+        glow:     '0 8px 10px -6px rgba(196,131,90,0.2)',
+      },
+      width: {
+        sidebar: '256px',
+      },
+      spacing: {
+        sidebar: '256px',
+      },
+      backdropBlur: {
+        glass: '12px',
       },
     },
   },

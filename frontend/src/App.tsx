@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { ProfileSummary } from './types'
+import { NavBar } from './components/NavBar'
 import { IntakeForm } from './components/IntakeForm'
 import { ProfileReview } from './components/ProfileReview'
 import { SearchView } from './components/SearchView'
@@ -33,32 +34,32 @@ export function App() {
     setScreen('intake')
   }
 
-  if (screen === 'intake') {
-    return <IntakeForm onSuccess={handleIntakeSuccess} />
-  }
+  return (
+    <div className="min-h-screen bg-surface">
+      <NavBar currentScreen={screen} onNavigate={(s) => setScreen(s as Screen)} />
 
-  if (screen === 'review' && profile) {
-    return (
-      <ProfileReview
-        profile={profile}
-        onConfirm={handleConfirmProfile}
-        onBack={() => setScreen('intake')}
-      />
-    )
-  }
+      {screen === 'intake' && (
+        <IntakeForm onSuccess={handleIntakeSuccess} />
+      )}
 
-  if (screen === 'search' && profile) {
-    return (
-      <SearchView
-        profile={profile}
-        cards={cards}
-        statusMessage={statusMessage}
-        status={status}
-        error={error}
-        onReset={handleReset}
-      />
-    )
-  }
+      {screen === 'review' && profile && (
+        <ProfileReview
+          profile={profile}
+          onConfirm={handleConfirmProfile}
+          onBack={() => setScreen('intake')}
+        />
+      )}
 
-  return null
+      {screen === 'search' && profile && (
+        <SearchView
+          profile={profile}
+          cards={cards}
+          statusMessage={statusMessage}
+          status={status}
+          error={error}
+          onReset={handleReset}
+        />
+      )}
+    </div>
+  )
 }
