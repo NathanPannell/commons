@@ -70,10 +70,10 @@ export function LeadCardComponent({ card, profile }: Props) {
             <div className="w-16 h-1.5 bg-gray-200 rounded-full overflow-hidden">
               <div
                 className="h-full rounded-full bg-indigo-400"
-                style={{ width: `${card.confidence * 100}%` }}
+                style={{ width: `${(card.confidence ?? 0) * 100}%` }}
               />
             </div>
-            <span className="text-xs text-gray-400">{Math.round(card.confidence * 100)}%</span>
+            <span className="text-xs text-gray-400">{Math.round((card.confidence ?? 0) * 100)}%</span>
           </div>
         </div>
 

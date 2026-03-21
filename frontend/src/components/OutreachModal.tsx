@@ -123,6 +123,18 @@ export function OutreachModal({ card, onClose }: Props) {
             </section>
           )}
 
+          {/* Confidence */}
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-gray-400">Confidence</span>
+            <div className="flex-1 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+              <div
+                className="h-full rounded-full bg-indigo-400 transition-all"
+                style={{ width: `${(card.confidence ?? 0) * 100}%` }}
+              />
+            </div>
+            <span className="text-xs text-gray-500">{Math.round((card.confidence ?? 0) * 100)}%</span>
+          </div>
+
           {/* Sources */}
           <section>
             <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-2">
@@ -143,17 +155,6 @@ export function OutreachModal({ card, onClose }: Props) {
             </div>
           </section>
 
-          {/* Confidence */}
-          <div className="flex items-center gap-3">
-            <span className="text-xs text-gray-400">Confidence</span>
-            <div className="flex-1 h-1.5 bg-gray-200 rounded-full overflow-hidden">
-              <div
-                className="h-full rounded-full bg-indigo-400 transition-all"
-                style={{ width: `${card.confidence * 100}%` }}
-              />
-            </div>
-            <span className="text-xs text-gray-500">{Math.round(card.confidence * 100)}%</span>
-          </div>
         </div>
       </div>
     </div>

@@ -1,15 +1,26 @@
-import asyncio
 import logging
 
 from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
 
 from agent.search_agent import find_people_from_event, run_search
-from models.schemas import FindPeopleRequest, LeadCard, SearchRequest, StreamEvent
+from models.schemas import FindPeopleRequest, LeadCard, ProfileSummary, SearchRequest, StreamEvent
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
+
+
+def _validate_profile(profile: ProfileSummary) -> list[str]:
+    """Return a list of problems that would make search useless. Empty = OK to proceed."""
+    problems: list[str] = []
+    if not profile.skills:
+        problems.append("No skills identified — add at least one skill to your profile.")
+    if not profile.locations:
+        problems.append("No location specified — add a city or 'Remote' so we can find local leads.")
+    if not profile.target_roles and not profile.target_industries:
+        problems.append("No target roles or industries — tell us what kind of work you're looking for.")
+    return problems
 
 
 @router.post("/search")
@@ -34,15 +45,21 @@ async def search(request: SearchRequest) -> StreamingResponse:
 
 async def _event_generator(request: SearchRequest):
     """Yield SSE-formatted strings from the search agent."""
+    problems = _validate_profile(request.profile)
+    if problems:
+        for problem in problems:
+            logger.warning("[search] Profile validation failed: %s", problem)
+            yield _format_sse(StreamEvent(event_type="error", data=problem))
+        yield _format_sse(StreamEvent(event_type="done", data="Fix the above issues and try again."))
+        return
+
     try:
         async for event in run_search(request.profile, request.max_results_per_category):
             yield _format_sse(event)
     except Exception as e:
         logger.error("Fatal error in search stream: %s", e)
-        error_event = StreamEvent(event_type="error", data=f"Fatal search error: {e}")
-        yield _format_sse(error_event)
-        done_event = StreamEvent(event_type="done", data="Search ended due to error.")
-        yield _format_sse(done_event)
+        yield _format_sse(StreamEvent(event_type="error", data=f"Fatal search error: {e}"))
+        yield _format_sse(StreamEvent(event_type="done", data="Search ended due to error."))
 
 
 @router.post("/search/people-from-event")

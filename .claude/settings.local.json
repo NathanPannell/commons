@@ -12,7 +12,8 @@
       "Bash(python -c \"from agent.search_agent import run_search; print\\(''search_agent OK''\\)\")",
       "Bash(python -c \"from api.health import router; from api.intake import router; from api.search import router; print\\(''api routers OK''\\)\")",
       "Bash(python -c \"from main import app; print\\(''main app OK''\\)\")",
-      "Bash(python -c \"from api.search import router; from agent.search_agent import find_people_from_event; from models.schemas import FindPeopleRequest; print\\(''all imports OK''\\)\")"
+      "Bash(python -c \"from api.search import router; from agent.search_agent import find_people_from_event; from models.schemas import FindPeopleRequest; print\\(''all imports OK''\\)\")",
+      "Bash(python:*)"
     ]
   }
 }
