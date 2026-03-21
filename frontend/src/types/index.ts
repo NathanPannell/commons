@@ -43,6 +43,12 @@ export interface SearchRequest {
   max_results_per_category: number
 }
 
+export interface FindPeopleRequest {
+  event_card: LeadCard
+  profile: ProfileSummary
+  max_results: number
+}
+
 export interface StreamEvent {
   event_type: 'card' | 'status' | 'error' | 'done'
   data: LeadCard | string

@@ -1,4 +1,4 @@
-from models.schemas import LeadType, ProfileSummary
+from models.schemas import LeadCard, LeadType, ProfileSummary
 
 INTAKE_SYSTEM_PROMPT = """\
 You are a professional career advisor assistant. Your job is to parse a user's bio or resume text \
@@ -151,4 +151,68 @@ Each LeadCard must match this schema:
 }}
 
 Return an empty array [] if you cannot find any verified leads.
+"""
+
+
+def build_find_people_prompt(event_card: LeadCard, profile: ProfileSummary, max_results: int) -> str:
+    source_urls = "\n".join(f"- {url}" for url in event_card.source_urls)
+    profile_context = f"""\
+User Profile:
+- Name: {profile.name or "Unknown"}
+- Skills: {", ".join(profile.skills) if profile.skills else "Not specified"}
+- Experience: {profile.experience_summary}
+- Target Roles: {", ".join(profile.target_roles) if profile.target_roles else "Not specified"}
+- Key Angles: {", ".join(profile.angles) if profile.angles else "Not specified"}
+"""
+
+    return f"""\
+You are BridgeIn, an AI networking assistant. A user found an event they want to attend and \
+needs help identifying the speakers, organizers, and key people associated with it so they \
+can reach out before or after the event.
+
+{profile_context}
+
+Event details:
+- Title: {event_card.title}
+- Description: {event_card.subtitle}
+- Location: {event_card.location or "Not specified"}
+- Source URLs:
+{source_urls}
+
+Your task:
+1. Use web_search to fetch the event's source URLs and read the page content
+2. Extract the names of speakers, organizers, panelists, or hosts listed on those pages
+3. For each person found, do a targeted web search to find their public profile: \
+   try "[name] LinkedIn", "[name] [city/topic] developer", "[name] GitHub", "[name] blog"
+4. Return up to {max_results} people as a JSON array of LeadCard objects
+
+CRITICAL RULES:
+- Every person MUST have a verifiable public profile URL (LinkedIn, GitHub, personal site, Twitter/X)
+- Discard anyone you cannot find a real URL for
+- The "why_relevant" field must reference BOTH the shared event AND something specific from \
+  their profile (a talk they gave, a project they lead, their company)
+- The "outreach_message" MUST mention the specific event by name and reference something \
+  concrete you found about them (a talk topic, a project, an article). 3-4 sentences.
+  Example opening: "Hi [name], I saw you're speaking at [event title] on [topic]..."
+- Set "platform" to where you found their profile (linkedin, github, twitter, email, etc.)
+
+After searching, return ONLY a JSON array of LeadCard objects. No explanation, no markdown.
+
+Each LeadCard must match this schema:
+{{
+  "id": "",
+  "lead_type": "person",
+  "title": "Full Name",
+  "subtitle": "Role at Company / what they do",
+  "why_relevant": "specific connection to this user and to the event",
+  "source_urls": ["https://their-profile-url"],
+  "action_plan": "what the user should do to connect",
+  "outreach_message": "3-4 sentence message mentioning {event_card.title} specifically",
+  "date": null,
+  "location": "city or null",
+  "platform": "linkedin/github/twitter/etc",
+  "confidence": 0.0-1.0
+}}
+
+Return an empty array [] if you cannot find any verified people.
 """

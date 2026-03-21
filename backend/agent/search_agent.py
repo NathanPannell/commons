@@ -6,7 +6,7 @@ import logging
 from typing import AsyncGenerator
 
 from agent.client import get_client
-from agent.prompts import build_search_system_prompt
+from agent.prompts import build_find_people_prompt, build_search_system_prompt
 from models.schemas import LeadCard, LeadType, ProfileSummary, StreamEvent
 
 logger = logging.getLogger(__name__)
@@ -40,7 +40,7 @@ async def search_category(
         model=MODEL,
         max_tokens=4096,
         system=system_prompt,
-        tools=[{"type": "web_search_20250305", "name": "web_search"}],  # type: ignore[list-item]
+        tools=[{"type": "web_search_20250305", "name": "web_search", "max_uses": 3}],  # type: ignore[list-item]
         messages=[
             {
                 "role": "user",
@@ -104,6 +104,41 @@ def _parse_lead_cards(raw: str, category: LeadType) -> list[LeadCard]:
     return cards
 
 
+async def find_people_from_event(
+    event_card: LeadCard,
+    profile: ProfileSummary,
+    max_results: int,
+) -> list[LeadCard]:
+    """Fetch an event's source URLs, extract speakers/organizers, find their profiles."""
+    client = get_client()
+    system_prompt = build_find_people_prompt(event_card, profile, max_results)
+
+    response = client.messages.create(
+        model=MODEL,
+        max_tokens=4096,
+        system=system_prompt,
+        # Needs more uses: fetch the event page + search each person found
+        tools=[{"type": "web_search_20250305", "name": "web_search", "max_uses": 5}],  # type: ignore[list-item]
+        messages=[
+            {
+                "role": "user",
+                "content": (
+                    f"Find the speakers and organizers for '{event_card.title}'. "
+                    f"Fetch the event page, extract names, then find each person's public profile. "
+                    f"Return up to {max_results} verified person LeadCards as a JSON array."
+                ),
+            }
+        ],
+    )
+
+    text_blocks = [b for b in response.content if b.type == "text"]
+    if not text_blocks:
+        logger.warning("No text in find_people response (stop_reason=%s)", response.stop_reason)
+        return []
+
+    return _parse_lead_cards(text_blocks[-1].text.strip(), LeadType.PERSON)
+
+
 async def run_search(
     profile: ProfileSummary,
     max_per_category: int,
@@ -111,7 +146,7 @@ async def run_search(
     """Sequentially search all categories, yielding StreamEvents."""
     for i, category in enumerate(CATEGORIES):
         if i > 0:
-            await asyncio.sleep(15)  # stay within per-minute token limits
+            await asyncio.sleep(25)  # stay within per-minute token limits
         yield StreamEvent(event_type="status", data=f"Searching {category.value}s...")
 
         try:

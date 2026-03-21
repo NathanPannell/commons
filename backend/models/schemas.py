@@ -81,6 +81,12 @@ class SearchRequest(BaseModel):
     max_results_per_category: int = 5
 
 
+class FindPeopleRequest(BaseModel):
+    event_card: LeadCard
+    profile: ProfileSummary
+    max_results: int = 5
+
+
 class StreamEvent(BaseModel):
     """SSE event wrapper."""
 
