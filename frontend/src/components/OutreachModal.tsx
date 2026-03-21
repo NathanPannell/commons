@@ -7,8 +7,11 @@ interface Props {
   onClose: () => void
 }
 
+const TONES = ['Direct & Professional', 'Warm & Shared Interest', 'Technical Focused'] as const
+
 export function OutreachModal({ card, onClose }: Props) {
   const [copied, setCopied] = useState(false)
+  const [activeTone, setActiveTone] = useState(0)
   const config = LEAD_TYPE_CONFIG[card.lead_type]
 
   async function handleCopy() {
@@ -20,108 +23,87 @@ export function OutreachModal({ card, onClose }: Props) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-primary-900/20 backdrop-blur-sm"
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+        className="bg-white rounded-xl shadow-modal max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col md:flex-row animate-fade-in-up"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
-        <div className={`px-6 py-5 rounded-t-2xl ${config.bgLight} border-b border-gray-100`}>
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-xl">{config.icon}</span>
-                <span className={`text-xs font-semibold uppercase tracking-wide ${config.textColor}`}>
-                  {card.lead_type}
-                </span>
-              </div>
-              <h2 className="text-xl font-bold text-gray-900">{card.title}</h2>
-              <p className="text-sm text-gray-600 mt-0.5">{card.subtitle}</p>
-            </div>
-            <button
-              onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0 mt-1"
-            >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-        </div>
+        {/* Left panel — Lead info */}
+        <div className="md:w-2/5 bg-primary-50 p-6 border-r border-border-warm overflow-y-auto">
+          {/* Close button (mobile) */}
+          <button
+            onClick={onClose}
+            className="md:hidden absolute top-4 right-4 text-muted hover:text-ink"
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
 
-        <div className="px-6 py-5 space-y-5">
-          {/* Why relevant */}
-          <section>
-            <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-2">
-              Why this is relevant to you
-            </h3>
-            <p className="text-gray-800 text-sm leading-relaxed">{card.why_relevant}</p>
+          {/* Lead header */}
+          <div className="mb-6">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-xl">{config.icon}</span>
+              <span className={`text-[10px] font-semibold uppercase tracking-widest ${config.textColor}`}>
+                {card.lead_type}
+              </span>
+            </div>
+            <h2 className="text-xl font-display font-bold text-ink">{card.title}</h2>
+            <p className="text-sm text-muted mt-1">{card.subtitle}</p>
+          </div>
+
+          {/* Lead insights */}
+          <section className="mb-5">
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-sage mb-2">
+              Lead Insights
+            </p>
+            <p className="text-sm text-ink leading-relaxed">{card.why_relevant}</p>
           </section>
 
           {/* Meta */}
-          <div className="flex flex-wrap gap-3 text-sm">
+          <div className="flex flex-wrap gap-2 mb-5 text-sm">
             {card.date && (
-              <span className="flex items-center gap-1.5 text-gray-600">
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                {new Date(card.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+              <span className="flex items-center gap-1.5 text-muted bg-white rounded-md px-2 py-1 text-xs">
+                📅 {new Date(card.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
               </span>
             )}
             {card.location && (
-              <span className="flex items-center gap-1.5 text-gray-600">
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                {card.location}
+              <span className="flex items-center gap-1.5 text-muted bg-white rounded-md px-2 py-1 text-xs">
+                📍 {card.location}
               </span>
             )}
             {card.platform && (
-              <span className="flex items-center gap-1.5 text-gray-600">
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-                {card.platform}
+              <span className="flex items-center gap-1.5 text-muted bg-white rounded-md px-2 py-1 text-xs">
+                ⚡ {card.platform}
               </span>
             )}
           </div>
 
-          {/* Action plan */}
-          <section>
-            <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-2">
-              Action plan
-            </h3>
-            <p className="text-gray-800 text-sm leading-relaxed">{card.action_plan}</p>
+          {/* Confidence score */}
+          <section className="mb-5">
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-sage mb-2">
+              Confidence Score
+            </p>
+            <div className="flex items-center gap-3">
+              <span className="text-2xl font-bold text-ink">{Math.round(card.confidence * 100)}%</span>
+              <div className="flex-1 h-2 bg-border-warm rounded-full overflow-hidden">
+                <div
+                  className="h-full rounded-full bg-terra-cta transition-all"
+                  style={{ width: `${card.?confidence * 100}%` }}
+                />
+              </div>
+            </div>
           </section>
 
-          {/* Outreach message */}
-          {card.outreach_message && (
-            <section>
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-400">
-                  Outreach message
-                </h3>
-                <button
-                  onClick={handleCopy}
-                  className={`text-xs font-medium px-3 py-1 rounded-full transition-all ${
-                    copied
-                      ? 'bg-green-100 text-green-700'
-                      : 'bg-gray-100 hover:bg-gray-200 text-gray-600'
-                  }`}
-                >
-                  {copied ? 'Copied!' : 'Copy'}
-                </button>
-              </div>
-              <div className="bg-gray-50 border border-gray-200 rounded-xl p-4">
-                <p className="text-gray-800 text-sm leading-relaxed whitespace-pre-wrap">
-                  {card.outreach_message}
-                </p>
-              </div>
-            </section>
-          )}
+          {/* Action plan */}
+          <section className="mb-5">
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-sage mb-2">
+              Action Plan
+            </p>
+            <p className="text-sm text-ink leading-relaxed">{card.action_plan}</p>
+          </section>
 
           {/* Confidence */}
           <div className="flex items-center gap-3">
@@ -137,9 +119,9 @@ export function OutreachModal({ card, onClose }: Props) {
 
           {/* Sources */}
           <section>
-            <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-2">
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-sage mb-2">
               Sources
-            </h3>
+            </p>
             <div className="flex flex-col gap-1.5">
               {card.source_urls.map((url, i) => (
                 <a
@@ -147,14 +129,83 @@ export function OutreachModal({ card, onClose }: Props) {
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-indigo-600 hover:text-indigo-800 hover:underline truncate"
+                  className="text-xs text-terra-cta hover:underline truncate"
                 >
                   {url}
                 </a>
               ))}
             </div>
           </section>
+        </div>
 
+        {/* Right panel — Outreach template */}
+        <div className="md:w-3/5 p-6 overflow-y-auto flex flex-col">
+          {/* Close button (desktop) */}
+          <div className="flex items-center justify-between mb-5">
+            <h3 className="text-sm font-semibold text-ink">AI Outreach Template</h3>
+            <button
+              onClick={onClose}
+              className="hidden md:block text-muted hover:text-ink transition-colors"
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Tone selector */}
+          <div className="flex flex-wrap gap-2 mb-5">
+            {TONES.map((tone, i) => (
+              <button
+                key={tone}
+                onClick={() => setActiveTone(i)}
+                className={`text-xs font-medium px-3 py-1.5 rounded-full transition-all ${
+                  activeTone === i
+                    ? 'bg-terra-cta text-white'
+                    : 'bg-primary-100 text-ink hover:bg-primary-200'
+                }`}
+              >
+                {tone}
+              </button>
+            ))}
+          </div>
+
+          {/* Outreach message */}
+          {card.outreach_message ? (
+            <div className="flex-1 flex flex-col">
+              <div className="bg-primary-50 border border-border-warm rounded-lg p-5 flex-1">
+                <p className="text-sm text-ink leading-relaxed whitespace-pre-wrap">
+                  {card.outreach_message}
+                </p>
+              </div>
+
+              <p className="text-[10px] text-muted/50 mt-2 text-right">AI Assisted</p>
+
+              {/* Actions */}
+              <div className="flex gap-3 mt-4">
+                <button
+                  onClick={handleCopy}
+                  className={`flex-1 py-2.5 rounded-lg font-semibold text-sm transition-all ${
+                    copied
+                      ? 'bg-success-50 text-success-700 border border-success-500/20'
+                      : 'bg-primary-900 hover:bg-primary-950 text-white shadow-glow'
+                  }`}
+                >
+                  {copied ? 'Copied!' : 'Copy to Clipboard'}
+                </button>
+                <button className="px-5 py-2.5 border border-border-warm text-ink font-semibold rounded-lg hover:bg-sage-muted transition-colors text-sm">
+                  Save Lead
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="flex-1 flex items-center justify-center text-center text-muted py-12">
+              <div>
+                <p className="text-sm font-medium">No outreach template available</p>
+                <p className="text-xs mt-1">This lead type may not require direct outreach.</p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
