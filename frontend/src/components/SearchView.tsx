@@ -79,7 +79,7 @@ export function SearchView({ profile, cards, statusMessage, status, error, onRes
               </h2>
               <div className="grid gap-4 sm:grid-cols-2">
                 {typeCards.map((card) => (
-                  <LeadCardComponent key={card.id} card={card} />
+                  <LeadCardComponent key={card.id} card={card} profile={profile} />
                 ))}
               </div>
             </section>

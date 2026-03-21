@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import type { LeadCard, LeadType } from '../types'
+import type { LeadCard, LeadType, ProfileSummary } from '../types'
 import { OutreachModal } from './OutreachModal'
+import { FindPeopleModal } from './FindPeopleModal'
 
 export const LEAD_TYPE_CONFIG: Record<
   LeadType,
@@ -45,10 +46,12 @@ export const LEAD_TYPE_CONFIG: Record<
 
 interface Props {
   card: LeadCard
+  profile?: ProfileSummary
 }
 
-export function LeadCardComponent({ card }: Props) {
+export function LeadCardComponent({ card, profile }: Props) {
   const [modalOpen, setModalOpen] = useState(false)
+  const [findPeopleOpen, setFindPeopleOpen] = useState(false)
   const config = LEAD_TYPE_CONFIG[card.lead_type]
 
   return (
@@ -91,7 +94,27 @@ export function LeadCardComponent({ card }: Props) {
         </div>
       </button>
 
+      {/* Find People button — event cards only */}
+      {card.lead_type === 'event' && profile && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation()
+            setFindPeopleOpen(true)
+          }}
+          className="mt-2 w-full text-sm font-medium text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 rounded-xl py-2 transition-colors"
+        >
+          👥 Find people at this event →
+        </button>
+      )}
+
       {modalOpen && <OutreachModal card={card} onClose={() => setModalOpen(false)} />}
+      {findPeopleOpen && profile && (
+        <FindPeopleModal
+          eventCard={card}
+          profile={profile}
+          onClose={() => setFindPeopleOpen(false)}
+        />
+      )}
     </>
   )
 }
