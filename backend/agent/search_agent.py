@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import json
 import logging
 from typing import AsyncGenerator
@@ -37,7 +38,7 @@ async def search_category(
 
     response = client.messages.create(
         model=MODEL,
-        max_tokens=8192,
+        max_tokens=4096,
         system=system_prompt,
         tools=[{"type": "web_search_20250305", "name": "web_search"}],  # type: ignore[list-item]
         messages=[
@@ -108,7 +109,9 @@ async def run_search(
     max_per_category: int,
 ) -> AsyncGenerator[StreamEvent, None]:
     """Sequentially search all categories, yielding StreamEvents."""
-    for category in CATEGORIES:
+    for i, category in enumerate(CATEGORIES):
+        if i > 0:
+            await asyncio.sleep(15)  # stay within per-minute token limits
         yield StreamEvent(event_type="status", data=f"Searching {category.value}s...")
 
         try:
