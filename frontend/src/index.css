@@ -1,23 +1,39 @@
+@import './tokens/palette.css';
+@import './tokens/typography.css';
+
+:root {
+  --color-sage:        #a0a088;
+  --color-sage-light:  #c8c8b4;
+  --color-sage-muted:  #e8e8e0;
+  --color-terra-cta:   #c4835a;
+  --color-terra-light: #dec2af;
+  --color-surface:     #fafaf8;
+  --color-ink:         #1c1917;
+  --color-muted:       #6b6660;
+  --color-border-warm: #e5dfd8;
+  /* Correct display font to serif stack */
+  --font-display: 'Lora', Georgia, Cambria, 'Times New Roman', Times, serif;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  html {
+    background-color: var(--color-surface);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
 @layer utilities {
   @keyframes fade-in {
-    from {
-      opacity: 0;
-      transform: translateY(8px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
-
-  .animate-fade-in {
-    animation: fade-in 0.3s ease-out both;
-  }
-
+  .animate-fade-in { animation: fade-in 0.3s ease-out both; }
   .line-clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;

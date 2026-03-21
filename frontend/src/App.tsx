@@ -4,13 +4,17 @@ import { IntakeForm } from './components/IntakeForm'
 import { ProfileReview } from './components/ProfileReview'
 import { SearchView } from './components/SearchView'
 import { useSearchStream } from './hooks/useSearchStream'
+import { MOCK_PROFILE, MOCK_CARDS } from './mocks'
 
 type Screen = 'intake' | 'review' | 'search'
 
+const MOCK = new URLSearchParams(window.location.search).get('mock')
+
 export function App() {
-  const [screen, setScreen] = useState<Screen>('intake')
-  const [profile, setProfile] = useState<ProfileSummary | null>(null)
-  const { cards, statusMessage, status, error, startSearch, reset } = useSearchStream()
+  const [screen, setScreen] = useState<Screen>(MOCK ? (MOCK as Screen) : 'intake')
+  const [profile, setProfile] = useState<ProfileSummary | null>(MOCK ? MOCK_PROFILE : null)
+  const { cards: streamCards, statusMessage, status, error, startSearch, reset } = useSearchStream()
+  const cards = MOCK === 'search' ? MOCK_CARDS : streamCards
 
   function handleIntakeSuccess(p: ProfileSummary) {
     setProfile(p)

@@ -10,37 +10,37 @@ export const LEAD_TYPE_CONFIG: Record<
   event: {
     icon: '📅',
     label: 'Event',
-    bgLight: 'bg-blue-50',
-    textColor: 'text-blue-700',
-    badgeBg: 'bg-blue-100 text-blue-700',
+    bgLight: 'bg-primary-50',
+    textColor: 'text-terra-cta',
+    badgeBg: 'bg-primary-100 text-terra-cta',
   },
   person: {
     icon: '👤',
     label: 'Person',
-    bgLight: 'bg-purple-50',
-    textColor: 'text-purple-700',
-    badgeBg: 'bg-purple-100 text-purple-700',
+    bgLight: 'bg-sage-muted',
+    textColor: 'text-ink',
+    badgeBg: 'bg-sage-muted text-ink',
   },
   community: {
     icon: '🤝',
     label: 'Community',
-    bgLight: 'bg-green-50',
-    textColor: 'text-green-700',
-    badgeBg: 'bg-green-100 text-green-700',
+    bgLight: 'bg-primary-50',
+    textColor: 'text-ink',
+    badgeBg: 'bg-primary-50 text-ink',
   },
   company: {
     icon: '🏢',
     label: 'Company',
-    bgLight: 'bg-orange-50',
-    textColor: 'text-orange-700',
-    badgeBg: 'bg-orange-100 text-orange-700',
+    bgLight: 'bg-primary-100',
+    textColor: 'text-terra-cta',
+    badgeBg: 'bg-primary-100 text-terra-cta',
   },
   resource: {
     icon: '📚',
     label: 'Resource',
-    bgLight: 'bg-gray-50',
-    textColor: 'text-gray-700',
-    badgeBg: 'bg-gray-100 text-gray-700',
+    bgLight: 'bg-sage-muted',
+    textColor: 'text-muted',
+    badgeBg: 'bg-sage-muted text-muted',
   },
 }
 
@@ -58,7 +58,7 @@ export function LeadCardComponent({ card, profile }: Props) {
     <>
       <button
         onClick={() => setModalOpen(true)}
-        className="w-full text-left bg-white border border-gray-200 rounded-2xl p-5 hover:border-gray-300 hover:shadow-md transition-all duration-150 animate-fade-in"
+        className="w-full text-left bg-white border border-border-warm rounded-md p-5 hover:border-sage hover:shadow-card transition-all duration-150 animate-fade-in"
       >
         {/* Type badge */}
         <div className="flex items-center justify-between mb-3">
@@ -67,29 +67,29 @@ export function LeadCardComponent({ card, profile }: Props) {
             {config.label}
           </span>
           <div className="flex items-center gap-2">
-            <div className="w-16 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+            <div className="w-16 h-1.5 bg-border-warm rounded-full overflow-hidden">
               <div
-                className="h-full rounded-full bg-indigo-400"
+                className="h-full rounded-full bg-terra-cta"
                 style={{ width: `${card.confidence * 100}%` }}
               />
             </div>
-            <span className="text-xs text-gray-400">{Math.round(card.confidence * 100)}%</span>
+            <span className="text-xs text-muted">{Math.round(card.confidence * 100)}%</span>
           </div>
         </div>
 
         {/* Title & subtitle */}
-        <h3 className="font-semibold text-gray-900 text-base leading-snug mb-1">{card.title}</h3>
-        <p className="text-sm text-gray-500 mb-3">{card.subtitle}</p>
+        <h3 className="font-semibold text-ink text-base leading-snug mb-1">{card.title}</h3>
+        <p className="text-sm text-muted mb-3">{card.subtitle}</p>
 
         {/* Why relevant */}
-        <p className="text-sm text-gray-700 leading-relaxed line-clamp-2">{card.why_relevant}</p>
+        <p className="text-sm text-ink leading-relaxed line-clamp-2">{card.why_relevant}</p>
 
         {/* Meta row */}
-        <div className="flex items-center gap-3 mt-3 text-xs text-gray-400">
+        <div className="flex items-center gap-3 mt-3 text-xs text-muted">
           {card.date && <span>📅 {new Date(card.date).toLocaleDateString()}</span>}
           {card.location && <span>📍 {card.location}</span>}
           {card.outreach_message && (
-            <span className="ml-auto text-indigo-500 font-medium">Has outreach message →</span>
+            <span className="ml-auto text-terra-cta font-medium">Has outreach message →</span>
           )}
         </div>
       </button>

@@ -62,13 +62,13 @@ export function IntakeForm({ onSuccess }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white flex items-center justify-center p-4">
+    <div className="min-h-screen bg-surface flex items-center justify-center p-4">
       <div className="w-full max-w-2xl">
         {/* Header */}
         <div className="text-center mb-10">
           <div className="text-5xl mb-4">🌉</div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">BridgeIn</h1>
-          <p className="text-lg text-gray-500">
+          <h1 className="text-4xl font-display font-bold text-ink mb-2">BridgeIn</h1>
+          <p className="text-lg text-muted">
             Find your network — even if you don't have one yet.
           </p>
         </div>
@@ -76,35 +76,35 @@ export function IntakeForm({ onSuccess }: Props) {
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Bio / Resume text */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+            <label className="block text-sm font-semibold text-ink mb-1.5">
               Your bio or resume
-              <span className="text-gray-400 font-normal ml-1">(paste text here)</span>
+              <span className="text-muted font-normal ml-1">(paste text here)</span>
             </label>
             <textarea
               value={bioText}
               onChange={(e) => setBioText(e.target.value)}
               rows={8}
               placeholder="I'm a third-year CS student at UVic interested in backend development. I've built projects using Python, React, and PostgreSQL. I'm looking for co-op opportunities in Victoria or Vancouver..."
-              className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent resize-none"
+              className="w-full border border-border-warm rounded-md px-4 py-3 text-sm text-ink placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-sage focus:border-sage resize-none"
             />
           </div>
 
           {/* PDF Upload */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+            <label className="block text-sm font-semibold text-ink mb-1.5">
               Resume PDF
-              <span className="text-gray-400 font-normal ml-1">(optional)</span>
+              <span className="text-muted font-normal ml-1">(optional)</span>
             </label>
             <div
               onClick={() => fileInputRef.current?.click()}
-              className={`border-2 border-dashed rounded-xl px-4 py-6 text-center cursor-pointer transition-colors ${
+              className={`border-2 border-dashed rounded-md px-4 py-6 text-center cursor-pointer transition-colors ${
                 pdfFile
-                  ? 'border-indigo-400 bg-indigo-50'
-                  : 'border-gray-300 hover:border-indigo-300 hover:bg-gray-50'
+                  ? 'border-terra bg-primary-50'
+                  : 'border-border-warm hover:border-sage hover:bg-sage-muted'
               }`}
             >
               {pdfFile ? (
-                <div className="flex items-center justify-center gap-2 text-indigo-700">
+                <div className="flex items-center justify-center gap-2 text-terra-cta">
                   <span>📄</span>
                   <span className="text-sm font-medium">{pdfFile.name}</span>
                   <button
@@ -113,13 +113,13 @@ export function IntakeForm({ onSuccess }: Props) {
                       e.stopPropagation()
                       setPdfFile(null)
                     }}
-                    className="text-gray-400 hover:text-gray-600 ml-1"
+                    className="text-muted hover:text-ink ml-1"
                   >
                     ✕
                   </button>
                 </div>
               ) : (
-                <p className="text-sm text-gray-400">
+                <p className="text-sm text-muted">
                   Drop a PDF here or click to browse
                 </p>
               )}
@@ -142,7 +142,7 @@ export function IntakeForm({ onSuccess }: Props) {
           </div>
 
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl px-4 py-3 text-sm">
+            <div className="bg-error-50 border border-error-100 text-error-700 rounded-md px-4 py-3 text-sm">
               {error}
             </div>
           )}
@@ -150,12 +150,12 @@ export function IntakeForm({ onSuccess }: Props) {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white font-semibold py-3.5 rounded-xl transition-colors text-base"
+            className="w-full bg-terra-cta hover:bg-primary-800 disabled:opacity-50 disabled:cursor-not-allowed text-ink font-semibold py-3.5 rounded-md transition-colors text-base"
           >
             {loading ? 'Analyzing your profile...' : 'Find my network →'}
           </button>
 
-          <p className="text-center text-xs text-gray-400">
+          <p className="text-center text-xs text-muted">
             Your data is not stored. Results powered by Claude AI + web search.
           </p>
         </form>
@@ -177,15 +177,15 @@ function TagInput({
 }) {
   return (
     <div>
-      <label className="block text-sm font-semibold text-gray-700 mb-1.5">{label}</label>
+      <label className="block text-sm font-semibold text-ink mb-1.5">{label}</label>
       <input
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full border border-gray-300 rounded-xl px-3 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent"
+        className="w-full border border-border-warm rounded-md px-3 py-2.5 text-sm text-ink placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-sage focus:border-sage"
       />
-      <p className="text-xs text-gray-400 mt-1">Comma-separated</p>
+      <p className="text-xs text-muted mt-1">Comma-separated</p>
     </div>
   )
 }

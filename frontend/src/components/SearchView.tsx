@@ -24,24 +24,24 @@ export function SearchView({ profile, cards, statusMessage, status, error, onRes
   )
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-surface">
       <StatusBar message={statusMessage} status={status} cardCount={cards.length} />
 
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Profile summary bar */}
-        <div className="bg-white border border-gray-200 rounded-2xl px-5 py-4 mb-8 flex items-center justify-between gap-4">
+        <div className="bg-white border border-border-warm rounded-md px-5 py-4 mb-8 flex items-center justify-between gap-4 shadow-card">
           <div>
-            <p className="font-semibold text-gray-900">
+            <p className="font-semibold text-ink">
               {profile.name ?? 'Your profile'}
             </p>
-            <p className="text-sm text-gray-500 mt-0.5">
+            <p className="text-sm text-muted mt-0.5">
               {profile.target_roles.slice(0, 2).join(', ')}
               {profile.locations.length > 0 && ` · ${profile.locations[0]}`}
             </p>
           </div>
           <button
             onClick={onReset}
-            className="text-sm text-gray-400 hover:text-gray-600 transition-colors whitespace-nowrap"
+            className="text-sm text-sage hover:text-ink transition-colors whitespace-nowrap"
           >
             ← New search
           </button>
@@ -49,16 +49,16 @@ export function SearchView({ profile, cards, statusMessage, status, error, onRes
 
         {/* Error banner */}
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl px-4 py-3 mb-6 text-sm">
+          <div className="bg-error-50 border border-error-100 text-error-700 rounded-md px-4 py-3 mb-6 text-sm">
             {error}
           </div>
         )}
 
         {/* Empty state while loading */}
         {cards.length === 0 && status === 'searching' && (
-          <div className="text-center py-20 text-gray-400">
+          <div className="text-center py-20 text-muted">
             <div className="text-4xl mb-3">🔍</div>
-            <p className="text-lg font-medium">Searching the web for leads...</p>
+            <p className="font-display text-lg font-medium">Searching the web for leads...</p>
             <p className="text-sm mt-1">{statusMessage}</p>
           </div>
         )}
@@ -70,10 +70,10 @@ export function SearchView({ profile, cards, statusMessage, status, error, onRes
           const config = LEAD_TYPE_CONFIG[type]
           return (
             <section key={type} className="mb-10">
-              <h2 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4">
+              <h2 className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-sage mb-4">
                 <span>{config.icon}</span>
                 {config.label}s
-                <span className="ml-auto text-xs font-normal normal-case">
+                <span className="ml-auto text-xs font-normal normal-case text-muted">
                   {typeCards.length} found
                 </span>
               </h2>
@@ -88,9 +88,9 @@ export function SearchView({ profile, cards, statusMessage, status, error, onRes
 
         {/* Done state with no results */}
         {status === 'done' && cards.length === 0 && (
-          <div className="text-center py-20 text-gray-400">
+          <div className="text-center py-20 text-muted">
             <div className="text-4xl mb-3">😕</div>
-            <p className="text-lg font-medium">No verified leads found</p>
+            <p className="font-display text-lg font-medium">No verified leads found</p>
             <p className="text-sm mt-1">Try adding more details to your profile.</p>
           </div>
         )}
