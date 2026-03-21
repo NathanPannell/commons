@@ -14,7 +14,7 @@ const MOCK = new URLSearchParams(window.location.search).get('mock')
 export function App() {
   const [screen, setScreen] = useState<Screen>(MOCK ? (MOCK as Screen) : 'intake')
   const [profile, setProfile] = useState<ProfileSummary | null>(MOCK ? MOCK_PROFILE : null)
-  const { cards: streamCards, statusMessage, status, error, startSearch, reset } = useSearchStream()
+  const { cards: streamCards, statusMessage, status, error, agentStatuses, startSearch, reset } = useSearchStream()
   const cards = MOCK === 'search' ? MOCK_CARDS : streamCards
 
   function handleIntakeSuccess(p: ProfileSummary) {
@@ -57,6 +57,7 @@ export function App() {
           statusMessage={statusMessage}
           status={status}
           error={error}
+          agentStatuses={agentStatuses}
           onReset={handleReset}
         />
       )}

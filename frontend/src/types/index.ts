@@ -49,6 +49,11 @@ export interface FindPeopleRequest {
 }
 
 export interface StreamEvent {
-  event_type: 'card' | 'status' | 'error' | 'done'
-  data: LeadCard | string
+  event_type: 'card' | 'status' | 'error' | 'done' | 'agent_status'
+  data: LeadCard | AgentStatusPayload | string
+}
+
+export interface AgentStatusPayload {
+  category: LeadType
+  status: 'running' | 'done' | 'error'
 }

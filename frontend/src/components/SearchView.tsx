@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { LeadCard, LeadType, ProfileSummary } from '../types'
-import type { SearchStatus } from '../hooks/useSearchStream'
+import type { AgentRunStatus, SearchStatus } from '../hooks/useSearchStream'
 import { LeadCardComponent, LEAD_TYPE_CONFIG } from './LeadCardComponent'
 import { StatusBar } from './StatusBar'
 import { Sidebar } from './Sidebar'
@@ -13,10 +13,11 @@ interface Props {
   statusMessage: string
   status: SearchStatus
   error: string | null
+  agentStatuses: Record<LeadType, AgentRunStatus>
   onReset: () => void
 }
 
-export function SearchView({ profile, cards, statusMessage, status, error, onReset }: Props) {
+export function SearchView({ profile, cards, statusMessage, status, error, agentStatuses, onReset }: Props) {
   const [activeCategory, setActiveCategory] = useState<LeadType | null>(null)
 
   const grouped = CATEGORY_ORDER.reduce<Record<LeadType, LeadCard[]>>(
@@ -51,7 +52,7 @@ export function SearchView({ profile, cards, statusMessage, status, error, onRes
 
       {/* Main content */}
       <div className="flex-1 min-w-0">
-        <StatusBar message={statusMessage} status={status} cardCount={cards.length} />
+        <StatusBar message={statusMessage} status={status} cardCount={cards.length} agentStatuses={agentStatuses} />
 
         <div className="max-w-5xl mx-auto px-6 py-8">
           {/* Profile context bar */}
