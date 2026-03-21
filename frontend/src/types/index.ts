@@ -35,7 +35,6 @@ export interface LeadCard {
   date?: string | null
   location?: string | null
   platform?: string | null
-  confidence: number
 }
 
 export interface SearchRequest {

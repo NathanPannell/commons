@@ -55,7 +55,6 @@ class LeadCard(BaseModel):
     date: datetime | None = None
     location: str | None = None
     platform: str | None = None
-    confidence: float = 0.0
 
     @model_validator(mode="after")
     def assign_id(self) -> "LeadCard":
@@ -69,11 +68,6 @@ class LeadCard(BaseModel):
         if not v:
             raise ValueError("LeadCard must have at least one source URL")
         return v
-
-    @field_validator("confidence")
-    @classmethod
-    def clamp_confidence(cls, v: float) -> float:
-        return max(0.0, min(1.0, v))
 
 
 class SearchRequest(BaseModel):

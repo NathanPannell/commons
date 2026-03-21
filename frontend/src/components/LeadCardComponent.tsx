@@ -54,11 +54,6 @@ export function LeadCardComponent({ card, profile }: Props) {
   const [findPeopleOpen, setFindPeopleOpen] = useState(false)
   const config = LEAD_TYPE_CONFIG[card.lead_type]
 
-  const matchColor =
-    card.confidence >= 0.9 ? 'bg-success-50 text-success-700' :
-    card.confidence >= 0.8 ? 'bg-primary-100 text-terra-cta' :
-    'bg-primary-50 text-muted'
-
   return (
     <>
       <div className="group animate-fade-in">
@@ -71,9 +66,6 @@ export function LeadCardComponent({ card, profile }: Props) {
             <span className={`inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wide px-2.5 py-1 rounded-md ${config.badgeBg}`}>
               <span>{config.icon}</span>
               {config.label}
-            </span>
-            <span className={`text-xs font-bold px-2 py-0.5 rounded-md ${matchColor}`}>
-              {Math.round(card.confidence * 100)}%
             </span>
           </div>
 
@@ -102,13 +94,6 @@ export function LeadCardComponent({ card, profile }: Props) {
             )}
           </div>
 
-          {/* Confidence bar */}
-          <div className="mt-3 h-1 bg-border-warm rounded-full overflow-hidden">
-            <div
-              className="h-full rounded-full bg-terra-cta transition-all duration-500"
-              style={{ width: `${card.confidence * 100}%` }}
-            />
-          </div>
         </button>
 
         {/* Find People button — event cards only */}

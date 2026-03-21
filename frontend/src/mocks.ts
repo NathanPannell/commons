@@ -37,7 +37,6 @@ export const MOCK_CARDS: LeadCard[] = [
     date: '2026-06-15T18:00:00Z',
     location: 'Victoria BC',
     platform: 'in-person',
-    confidence: 0.85,
   },
   {
     id: 'mock-2',
@@ -50,7 +49,6 @@ export const MOCK_CARDS: LeadCard[] = [
     outreach_message: "Hi Jordan, I watched the recording of your VictoriaJS talk on Python microservices — the section on async task queues was really helpful for a FastAPI project I'm building. I'm a third-year CS student at UVic looking for a backend co-op in Victoria this summer. Would you be open to a 15-minute chat about what Redbrick looks for in co-op applicants?",
     location: 'Victoria BC',
     platform: 'linkedin',
-    confidence: 0.78,
   },
   {
     id: 'mock-3',
@@ -63,7 +61,6 @@ export const MOCK_CARDS: LeadCard[] = [
     outreach_message: null,
     location: 'Victoria BC (online)',
     platform: 'slack',
-    confidence: 0.92,
   },
   {
     id: 'mock-4',
@@ -76,7 +73,6 @@ export const MOCK_CARDS: LeadCard[] = [
     outreach_message: null,
     location: 'Victoria BC',
     platform: null,
-    confidence: 0.88,
   },
   {
     id: 'mock-5',
@@ -87,6 +83,5 @@ export const MOCK_CARDS: LeadCard[] = [
     source_urls: ['https://github.com/mjhea0/awesome-fastapi'],
     action_plan: 'Browse the "Open Source Projects" section, find one with good first issues, and make a small contribution before applying to co-ops.',
     outreach_message: null,
-    confidence: 0.72,
   },
 ]
