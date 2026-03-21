@@ -81,22 +81,6 @@ export function OutreachModal({ card, onClose }: Props) {
             )}
           </div>
 
-          {/* Confidence score */}
-          <section className="mb-5">
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-sage mb-2">
-              Confidence Score
-            </p>
-            <div className="flex items-center gap-3">
-              <span className="text-2xl font-bold text-ink">{Math.round(card.confidence * 100)}%</span>
-              <div className="flex-1 h-2 bg-border-warm rounded-full overflow-hidden">
-                <div
-                  className="h-full rounded-full bg-terra-cta transition-all"
-                  style={{ width: `${card.?confidence * 100}%` }}
-                />
-              </div>
-            </div>
-          </section>
-
           {/* Action plan */}
           <section className="mb-5">
             <p className="text-[10px] font-semibold uppercase tracking-widest text-sage mb-2">
@@ -104,18 +88,6 @@ export function OutreachModal({ card, onClose }: Props) {
             </p>
             <p className="text-sm text-ink leading-relaxed">{card.action_plan}</p>
           </section>
-
-          {/* Confidence */}
-          <div className="flex items-center gap-3">
-            <span className="text-xs text-gray-400">Confidence</span>
-            <div className="flex-1 h-1.5 bg-gray-200 rounded-full overflow-hidden">
-              <div
-                className="h-full rounded-full bg-indigo-400 transition-all"
-                style={{ width: `${(card.confidence ?? 0) * 100}%` }}
-              />
-            </div>
-            <span className="text-xs text-gray-500">{Math.round((card.confidence ?? 0) * 100)}%</span>
-          </div>
 
           {/* Sources */}
           <section>
