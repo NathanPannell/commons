@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(npx tsc:*)",
+      "Bash(pip install:*)",
+      "Bash(python -c \"from models.schemas import LeadCard, ProfileSummary, StreamEvent; print\\(''schemas OK''\\)\")",
+      "Bash(python -c \"from agent.client import get_client; print\\(''client OK''\\)\")",
+      "Bash(python -c \"from agent.prompts import INTAKE_SYSTEM_PROMPT; print\\(''prompts OK''\\)\")",
+      "Bash(python -c \"from agent.prompts import INTAKE_SYSTEM_PROMPT, build_search_system_prompt; print\\(''prompts OK''\\)\")",
+      "Bash(python -c \"from agent.intake_agent import parse_profile; print\\(''intake_agent OK''\\)\")",
+      "Bash(python -c \"from agent.search_agent import run_search; print\\(''search_agent OK''\\)\")",
+      "Bash(python -c \"from api.health import router; from api.intake import router; from api.search import router; print\\(''api routers OK''\\)\")",
+      "Bash(python -c \"from main import app; print\\(''main app OK''\\)\")"
+    ]
+  }
+}
