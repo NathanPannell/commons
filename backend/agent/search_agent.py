@@ -40,7 +40,7 @@ async def search_category(
         model=MODEL,
         max_tokens=4096,
         system=system_prompt,
-        tools=[{"type": "web_search_20250305", "name": "web_search"}],  # type: ignore[list-item]
+        tools=[{"type": "web_search_20250305", "name": "web_search", "max_uses": 3}],  # type: ignore[list-item]
         messages=[
             {
                 "role": "user",
@@ -111,7 +111,7 @@ async def run_search(
     """Sequentially search all categories, yielding StreamEvents."""
     for i, category in enumerate(CATEGORIES):
         if i > 0:
-            await asyncio.sleep(15)  # stay within per-minute token limits
+            await asyncio.sleep(25)  # stay within per-minute token limits
         yield StreamEvent(event_type="status", data=f"Searching {category.value}s...")
 
         try:
