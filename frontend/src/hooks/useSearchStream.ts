@@ -1,13 +1,23 @@
 import { useCallback, useRef, useState } from 'react'
-import type { LeadCard, ProfileSummary, StreamEvent } from '../types'
+import type { AgentStatusPayload, LeadCard, LeadType, ProfileSummary, StreamEvent } from '../types'
 
 export type SearchStatus = 'idle' | 'searching' | 'done' | 'error'
+export type AgentRunStatus = 'idle' | 'running' | 'done' | 'error'
+
+const INITIAL_AGENT_STATUSES: Record<LeadType, AgentRunStatus> = {
+  event: 'idle',
+  person: 'idle',
+  community: 'idle',
+  company: 'idle',
+  resource: 'idle',
+}
 
 export interface SearchState {
   cards: LeadCard[]
   statusMessage: string
   status: SearchStatus
   error: string | null
+  agentStatuses: Record<LeadType, AgentRunStatus>
 }
 
 export function useSearchStream() {
@@ -16,6 +26,7 @@ export function useSearchStream() {
     statusMessage: '',
     status: 'idle',
     error: null,
+    agentStatuses: INITIAL_AGENT_STATUSES,
   })
   const abortRef = useRef<AbortController | null>(null)
 
@@ -26,7 +37,7 @@ export function useSearchStream() {
       const controller = new AbortController()
       abortRef.current = controller
 
-      setState({ cards: [], statusMessage: 'Starting search...', status: 'searching', error: null })
+      setState({ cards: [], statusMessage: 'Starting search...', status: 'searching', error: null, agentStatuses: INITIAL_AGENT_STATUSES })
 
       try {
         const res = await fetch('/api/search', {
@@ -92,12 +103,18 @@ export function useSearchStream() {
       setState((prev) => ({ ...prev, error: event.data as string }))
     } else if (event.event_type === 'done') {
       setState((prev) => ({ ...prev, status: 'done', statusMessage: 'Search complete.' }))
+    } else if (event.event_type === 'agent_status') {
+      const payload = event.data as AgentStatusPayload
+      setState((prev) => ({
+        ...prev,
+        agentStatuses: { ...prev.agentStatuses, [payload.category]: payload.status },
+      }))
     }
   }
 
   const reset = useCallback(() => {
     abortRef.current?.abort()
-    setState({ cards: [], statusMessage: '', status: 'idle', error: null })
+    setState({ cards: [], statusMessage: '', status: 'idle', error: null, agentStatuses: INITIAL_AGENT_STATUSES })
   }, [])
 
   return { ...state, startSearch, reset }

@@ -9,7 +9,7 @@ import anthropic
 
 from agent.client import get_client
 from agent.prompts import build_find_people_prompt, build_search_system_prompt
-from models.schemas import LeadCard, LeadType, ProfileSummary, StreamEvent
+from models.schemas import AgentStatusPayload, LeadCard, LeadType, ProfileSummary, StreamEvent
 
 logger = logging.getLogger(__name__)
 
@@ -241,35 +241,55 @@ async def run_search(
     profile: ProfileSummary,
     max_per_category: int,
 ) -> AsyncGenerator[StreamEvent, None]:
-    """Sequentially search all categories, yielding StreamEvents."""
-    logger.info("[run_search] Starting search for profile: %s", profile.name or "unknown")
+    """Search all categories in parallel, yielding StreamEvents as they arrive."""
+    logger.info("[run_search] Starting parallel search for profile: %s", profile.name or "unknown")
 
+    queue: asyncio.Queue[StreamEvent | None] = asyncio.Queue()
     seen_urls: set[str] = set()
+    lock = asyncio.Lock()
+    pending = len(CATEGORIES)
 
-    for i, category in enumerate(CATEGORIES):
-        if i > 0:
-            await asyncio.sleep(25)  # stay within per-minute token limits
-        yield StreamEvent(event_type="status", data=f"Searching {category.value}s...")
-
+    async def run_one(category: LeadType) -> None:
+        await queue.put(StreamEvent(
+            event_type="agent_status",
+            data=AgentStatusPayload(category=category.value, status="running"),
+        ))
         try:
             cards = await search_category(profile, category, max_per_category)
+            async with lock:
+                cards = _dedupe(cards, seen_urls)
+            for card in cards:
+                await queue.put(StreamEvent(event_type="card", data=card))
+            await queue.put(StreamEvent(
+                event_type="agent_status",
+                data=AgentStatusPayload(category=category.value, status="done"),
+            ))
         except asyncio.TimeoutError:
             logger.error("[run_search] Timeout in category=%s after %.0fs", category.value, CALL_TIMEOUT)
-            yield StreamEvent(event_type="error", data=f"Timed out searching {category.value}s — skipping.")
-            continue
+            await queue.put(StreamEvent(event_type="error", data=f"Timed out searching {category.value}s — skipping."))
+            await queue.put(StreamEvent(
+                event_type="agent_status",
+                data=AgentStatusPayload(category=category.value, status="error"),
+            ))
         except Exception as e:
             logger.error("[run_search] Error in category=%s: %s", category.value, e, exc_info=True)
-            yield StreamEvent(event_type="error", data=f"Error searching {category.value}s: {e}")
-            continue
+            await queue.put(StreamEvent(event_type="error", data=f"Error searching {category.value}s: {e}"))
+            await queue.put(StreamEvent(
+                event_type="agent_status",
+                data=AgentStatusPayload(category=category.value, status="error"),
+            ))
+        finally:
+            await queue.put(None)  # sentinel — signals this task is finished
 
-        cards = _dedupe(cards, seen_urls)
+    for cat in CATEGORIES:
+        asyncio.create_task(run_one(cat))
 
-        if not cards:
-            yield StreamEvent(event_type="status", data=f"No {category.value}s found.")
+    while pending > 0:
+        event = await queue.get()
+        if event is None:
+            pending -= 1
         else:
-            yield StreamEvent(event_type="status", data=f"Found {len(cards)} {category.value}(s).")
-            for card in cards:
-                yield StreamEvent(event_type="card", data=card)
+            yield event
 
-    logger.info("[run_search] Search complete for profile: %s", profile.name or "unknown")
+    logger.info("[run_search] Parallel search complete for profile: %s", profile.name or "unknown")
     yield StreamEvent(event_type="done", data="Search complete.")

@@ -70,6 +70,13 @@ class LeadCard(BaseModel):
         return v
 
 
+class AgentStatusPayload(BaseModel):
+    """Emitted when a category agent starts or finishes."""
+
+    category: str  # LeadType.value, e.g. "event"
+    status: str    # "running" | "done" | "error"
+
+
 class SearchRequest(BaseModel):
     profile: ProfileSummary
     max_results_per_category: int = 5
@@ -84,7 +91,7 @@ class FindPeopleRequest(BaseModel):
 class StreamEvent(BaseModel):
     """SSE event wrapper."""
 
-    event_type: str  # "card", "status", "error", "done"
-    data: Union[LeadCard, str]
+    event_type: str  # "card", "status", "error", "done", "agent_status"
+    data: Union[LeadCard, AgentStatusPayload, str]
 
     model_config = {"arbitrary_types_allowed": True}
