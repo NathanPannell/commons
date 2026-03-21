@@ -20,20 +20,20 @@ export function FindPeopleModal({ eventCard, profile, onClose }: Props) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-primary-900/20 backdrop-blur-sm"
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col"
+        className="bg-white rounded-xl shadow-modal w-full max-w-2xl max-h-[90vh] flex flex-col animate-fade-in-up"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="px-6 py-5 border-b border-gray-100 flex items-start justify-between gap-4 flex-shrink-0">
+        <div className="px-6 py-5 border-b border-border-warm flex items-start justify-between gap-4 flex-shrink-0">
           <div>
-            <h2 className="text-lg font-bold text-gray-900">People at this event</h2>
-            <p className="text-sm text-gray-500 mt-0.5 line-clamp-1">{eventCard.title}</p>
+            <h2 className="text-lg font-display font-bold text-ink">People at this event</h2>
+            <p className="text-sm text-muted mt-0.5 line-clamp-1">{eventCard.title}</p>
           </div>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors mt-0.5">
+          <button onClick={onClose} className="text-muted hover:text-ink transition-colors mt-0.5">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -41,34 +41,33 @@ export function FindPeopleModal({ eventCard, profile, onClose }: Props) {
         </div>
 
         {/* Status bar */}
-        <div className="px-6 py-3 border-b border-gray-100 flex items-center gap-2.5 flex-shrink-0">
+        <div className="px-6 py-3 border-b border-border-warm flex items-center gap-2.5 flex-shrink-0 bg-primary-50">
           {isSearching && (
-            <div className="w-3.5 h-3.5 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin flex-shrink-0" />
+            <div className="w-3.5 h-3.5 border-2 border-terra-cta border-t-transparent rounded-full animate-spin flex-shrink-0" />
           )}
           {status === 'done' && cards.length > 0 && (
-            <span className="text-green-500">✓</span>
+            <span className="text-terra-cta">✓</span>
           )}
-          <span className="text-sm text-gray-600">{statusMessage}</span>
+          <span className="text-sm text-muted">{statusMessage}</span>
         </div>
 
         {/* Results */}
         <div className="overflow-y-auto flex-1 px-6 py-5">
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl px-4 py-3 mb-4 text-sm">
+            <div className="bg-error-50 border border-error-100 text-error-700 rounded-lg px-4 py-3 mb-4 text-sm">
               {error}
             </div>
           )}
 
           {cards.length === 0 && isSearching && (
-            <div className="text-center py-16 text-gray-400">
-              <div className="text-3xl mb-3">🔍</div>
+            <div className="text-center py-16 text-muted">
+              <div className="w-8 h-8 border-2 border-terra-cta border-t-transparent rounded-full animate-spin mx-auto mb-3" />
               <p className="text-sm">Fetching event page and finding speakers...</p>
             </div>
           )}
 
           {cards.length === 0 && status === 'done' && !error && (
-            <div className="text-center py-16 text-gray-400">
-              <div className="text-3xl mb-3">😕</div>
+            <div className="text-center py-16 text-muted">
               <p className="text-sm">No speakers or organizers found with public profiles.</p>
             </div>
           )}
