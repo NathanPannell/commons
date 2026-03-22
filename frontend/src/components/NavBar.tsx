@@ -1,12 +1,15 @@
+import { useLocation } from 'react-router-dom'
+
 interface Props {
-  currentScreen?: string
-  onNavigate?: (screen: string) => void
+  onNavigate: (path: string) => void
 }
 
-export function NavBar({ currentScreen, onNavigate }: Props) {
+export function NavBar({ onNavigate }: Props) {
+  const { pathname } = useLocation()
+
   const links = [
-    { id: 'intake', label: 'Dashboard' },
-    { id: 'search', label: 'Network' },
+    { path: '/', label: 'Dashboard' },
+    { path: '/search', label: 'Network' },
   ]
 
   return (
@@ -14,18 +17,18 @@ export function NavBar({ currentScreen, onNavigate }: Props) {
       <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center gap-8">
-          <span className="font-display font-bold text-lg tracking-tight text-primary-900">
+          <button onClick={() => onNavigate('/')} className="font-display font-bold text-lg tracking-tight text-primary-900">
             BridgeIn
-          </span>
+          </button>
 
           {/* Nav links */}
           <nav className="hidden sm:flex items-center gap-1">
             {links.map((link) => (
               <button
-                key={link.id}
-                onClick={() => onNavigate?.(link.id)}
+                key={link.path}
+                onClick={() => onNavigate(link.path)}
                 className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
-                  currentScreen === link.id
+                  pathname === link.path
                     ? 'text-terra-cta'
                     : 'text-muted hover:text-ink'
                 }`}
@@ -36,13 +39,20 @@ export function NavBar({ currentScreen, onNavigate }: Props) {
           </nav>
         </div>
 
-        {/* Right side — avatar placeholder */}
+        {/* Right side — account icon */}
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-primary-200 border-2 border-border-warm flex items-center justify-center">
-            <svg className="w-4 h-4 text-primary-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <button
+            onClick={() => onNavigate('/account')}
+            className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-colors ${
+              pathname === '/account'
+                ? 'bg-terra-cta border-terra-cta'
+                : 'bg-primary-200 border-border-warm hover:border-sage'
+            }`}
+          >
+            <svg className={`w-4 h-4 ${pathname === '/account' ? 'text-white' : 'text-primary-700'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
-          </div>
+          </button>
         </div>
       </div>
     </header>

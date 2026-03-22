@@ -2,24 +2,23 @@ import type { ProfileSummary } from '../types'
 
 interface Props {
   profile: ProfileSummary
-  onConfirm: () => void
   onBack: () => void
 }
 
-export function ProfileReview({ profile, onConfirm, onBack }: Props) {
+export function ProfileReview({ profile, onBack }: Props) {
   return (
     <div className="min-h-[calc(100vh-3.5rem)] bg-surface">
       <div className="max-w-7xl mx-auto px-6 py-12 pb-32">
         {/* Success banner */}
         <div className="text-center mb-10 animate-fade-in">
           <p className="text-[10px] font-semibold uppercase tracking-widest text-terra-cta mb-3">
-            Profile Intelligence Ready
+            Your Account
           </p>
           <h1 className="font-display text-4xl font-bold text-ink tracking-tight mb-2">
             {profile.name ?? 'Your Profile'}
           </h1>
           <p className="text-base text-muted max-w-xl mx-auto">
-            Our AI has analyzed your professional footprint. Review the extracted data below to optimize your networking reach.
+            Your AI-analyzed professional footprint. This data powers your network search.
           </p>
         </div>
 
@@ -80,38 +79,18 @@ export function ProfileReview({ profile, onConfirm, onBack }: Props) {
         </div>
       </div>
 
-      {/* Sticky bottom action bar */}
+      {/* Sticky bottom bar */}
       <div className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-sm border-t border-border-warm z-10">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            {/* Avatar stack */}
-            <div className="flex -space-x-2">
-              {['bg-primary-300', 'bg-sage-light', 'bg-terra'].map((bg, i) => (
-                <div key={i} className={`w-8 h-8 rounded-full ${bg} border-2 border-white`} />
-              ))}
-              <div className="w-8 h-8 rounded-full bg-primary-900 border-2 border-white flex items-center justify-center">
-                <span className="text-[9px] font-bold text-white">AI</span>
-              </div>
-            </div>
-            <p className="text-sm text-muted hidden sm:block">
-              Matching with <span className="font-semibold text-ink">1,240+</span> potential leads...
-            </p>
-          </div>
-
-          <div className="flex gap-3">
-            <button
-              onClick={onBack}
-              className="px-5 py-2.5 border border-border-warm text-ink font-semibold rounded-lg hover:bg-sage-muted transition-colors text-sm"
-            >
-              Edit Profile
-            </button>
-            <button
-              onClick={onConfirm}
-              className="px-6 py-2.5 bg-primary-900 hover:bg-primary-950 text-white font-semibold rounded-lg shadow-glow transition-all text-sm"
-            >
-              Search for leads
-            </button>
-          </div>
+          <p className="text-sm text-muted">
+            This is the profile AI extracted from your input.
+          </p>
+          <button
+            onClick={onBack}
+            className="px-5 py-2.5 border border-border-warm text-ink font-semibold rounded-lg hover:bg-sage-muted transition-colors text-sm"
+          >
+            ← Back
+          </button>
         </div>
       </div>
     </div>

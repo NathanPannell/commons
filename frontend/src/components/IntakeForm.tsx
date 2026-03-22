@@ -1,19 +1,17 @@
 import { useRef, useState } from 'react'
-import type { ProfileInput, ProfileSummary } from '../types'
-import { submitIntake, submitIntakeWithPdf } from '../api/client'
+import type { IntakeFormData } from '../types'
 
 interface Props {
-  onSuccess: (profile: ProfileSummary) => void
+  onSubmit: (data: IntakeFormData) => void
 }
 
-export function IntakeForm({ onSuccess }: Props) {
+export function IntakeForm({ onSubmit }: Props) {
   const [bioText, setBioText] = useState('')
   const [rolesInput, setRolesInput] = useState('')
   const [industriesInput, setIndustriesInput] = useState('')
   const [locationsInput, setLocationsInput] = useState('')
   const [interestsInput, setInterestsInput] = useState('')
   const [pdfFile, setPdfFile] = useState<File | null>(null)
-  const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -24,7 +22,7 @@ export function IntakeForm({ onSuccess }: Props) {
       .filter(Boolean)
   }
 
-  async function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError(null)
 
@@ -33,32 +31,14 @@ export function IntakeForm({ onSuccess }: Props) {
       return
     }
 
-    setLoading(true)
-    try {
-      let profile: ProfileSummary
-      const roles = parseTagInput(rolesInput)
-      const industries = parseTagInput(industriesInput)
-      const locations = parseTagInput(locationsInput)
-      const interests = parseTagInput(interestsInput)
-
-      if (pdfFile) {
-        profile = await submitIntakeWithPdf(bioText, pdfFile, roles, industries, locations, interests)
-      } else {
-        const input: ProfileInput = {
-          bio_text: bioText || null,
-          target_roles: roles,
-          target_industries: industries,
-          target_locations: locations,
-          interests,
-        }
-        profile = await submitIntake(input)
-      }
-      onSuccess(profile)
-    } catch (err) {
-      setError((err as Error).message)
-    } finally {
-      setLoading(false)
-    }
+    onSubmit({
+      bioText,
+      pdfFile,
+      roles: parseTagInput(rolesInput),
+      industries: parseTagInput(industriesInput),
+      locations: parseTagInput(locationsInput),
+      interests: parseTagInput(interestsInput),
+    })
   }
 
   return (
@@ -171,17 +151,9 @@ export function IntakeForm({ onSuccess }: Props) {
 
             <button
               type="submit"
-              disabled={loading}
-              className="w-full bg-primary-900 hover:bg-primary-950 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-lg shadow-glow transition-all text-base"
+              className="w-full bg-primary-900 hover:bg-primary-950 text-white font-semibold py-3.5 rounded-lg shadow-glow transition-all text-base"
             >
-              {loading ? (
-                <span className="flex items-center justify-center gap-2">
-                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  Analyzing your profile...
-                </span>
-              ) : (
-                'Find my network'
-              )}
+              Find my network
             </button>
 
             <p className="text-center text-[10px] text-muted/60 uppercase tracking-wide">

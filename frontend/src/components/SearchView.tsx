@@ -4,20 +4,24 @@ import type { AgentRunStatus, SearchStatus } from '../hooks/useSearchStream'
 import { LeadCardComponent, LEAD_TYPE_CONFIG } from './LeadCardComponent'
 import { StatusBar } from './StatusBar'
 import { Sidebar } from './Sidebar'
+import { SearchAngles } from './SearchAngles'
 
 const CATEGORY_ORDER: LeadType[] = ['person', 'event', 'community', 'company', 'resource']
 
+export type SearchPhase = 'analyzing' | 'searching' | 'results'
+
 interface Props {
-  profile: ProfileSummary
+  profile: ProfileSummary | null
   cards: LeadCard[]
   statusMessage: string
   status: SearchStatus
   error: string | null
   agentStatuses: Record<LeadType, AgentRunStatus>
+  phase: SearchPhase
   onReset: () => void
 }
 
-export function SearchView({ profile, cards, statusMessage, status, error, agentStatuses, onReset }: Props) {
+export function SearchView({ profile, cards, statusMessage, status, error, agentStatuses, phase, onReset }: Props) {
   const [activeCategory, setActiveCategory] = useState<LeadType | null>(null)
 
   const grouped = CATEGORY_ORDER.reduce<Record<LeadType, LeadCard[]>>(
@@ -39,6 +43,30 @@ export function SearchView({ profile, cards, statusMessage, status, error, agent
   const visibleCategories = activeCategory
     ? CATEGORY_ORDER.filter((t) => t === activeCategory)
     : CATEGORY_ORDER
+
+  // Show the angles visualization during analyzing/searching with no cards
+  const showAngles = phase === 'analyzing' || (phase === 'searching' && cards.length === 0)
+
+  if (showAngles) {
+    return (
+      <div>
+        {/* Error banner */}
+        {error && (
+          <div className="max-w-2xl mx-auto px-6 mt-6">
+            <div className="bg-error-50 border border-error-100 text-error-700 rounded-lg px-4 py-3 text-sm">
+              {error}
+            </div>
+          </div>
+        )}
+        <SearchAngles
+          phase={phase === 'analyzing' ? 'analyzing' : 'searching'}
+        />
+      </div>
+    )
+  }
+
+  // Full results view (profile is guaranteed non-null here since we have cards)
+  if (!profile) return null
 
   return (
     <div className="flex min-h-[calc(100vh-3.5rem)]">
@@ -86,15 +114,6 @@ export function SearchView({ profile, cards, statusMessage, status, error, agent
           {error && (
             <div className="bg-error-50 border border-error-100 text-error-700 rounded-lg px-4 py-3 mb-6 text-sm">
               {error}
-            </div>
-          )}
-
-          {/* Empty state while loading */}
-          {cards.length === 0 && status === 'searching' && (
-            <div className="text-center py-24 text-muted animate-fade-in">
-              <div className="w-12 h-12 border-3 border-terra-cta border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-              <p className="font-display text-xl font-medium text-ink">Searching the web for leads...</p>
-              <p className="text-sm mt-2 text-muted">{statusMessage}</p>
             </div>
           )}
 

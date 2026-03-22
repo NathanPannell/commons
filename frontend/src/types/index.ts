@@ -57,3 +57,13 @@ export interface AgentStatusPayload {
   category: LeadType
   status: 'running' | 'done' | 'error'
 }
+
+/** Raw form data from IntakeForm (before API call) */
+export interface IntakeFormData {
+  bioText: string
+  pdfFile: File | null
+  roles: string[]
+  industries: string[]
+  locations: string[]
+  interests: string[]
+}
