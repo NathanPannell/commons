@@ -18,7 +18,7 @@ export function NavBar({ onNavigate }: Props) {
         {/* Logo */}
         <div className="flex items-center gap-8">
           <button onClick={() => onNavigate('/')} className="font-display font-bold text-lg tracking-tight text-primary-900">
-            BridgeIn
+            Commons
           </button>
 
           {/* Nav links */}

@@ -45,7 +45,7 @@ SAMPLE_PROFILE = ProfileSummary(
 
 async def main() -> None:
     print("=" * 60)
-    print("BridgeIn Agent Test — Events Category")
+    print("Commons Agent Test — Events Category")
     print("=" * 60)
     print(f"Profile: {SAMPLE_PROFILE.name}")
     print(f"Location: {', '.join(SAMPLE_PROFILE.locations)}")

@@ -9,7 +9,7 @@ from api.search import router as search_router
 
 logging.basicConfig(level=logging.INFO)
 
-app = FastAPI(title="BridgeIn API", version="0.1.0")
+app = FastAPI(title="Commons API", version="0.1.0")
 
 app.add_middleware(
     CORSMiddleware,

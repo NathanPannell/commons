@@ -58,7 +58,7 @@ Took inspiration from the Figma file (`WJFFdyiYQQGtMAhXSOQqvA`) which had 4 scre
 
 **`NavBar.tsx`** — Persistent top navigation bar
 - Sticky, blurred white background (`bg-white/80 backdrop-blur-sm`)
-- BridgeIn logo (font-display, primary-900), nav links (Dashboard, Network)
+- Commons logo (font-display, primary-900), nav links (Dashboard, Network)
 - Active state highlights in terra-cta
 - User avatar placeholder (right side)
 - Height: 3.5rem (h-14)

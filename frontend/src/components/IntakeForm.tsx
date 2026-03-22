@@ -53,7 +53,7 @@ export function IntakeForm({ onSubmit }: Props) {
             Find your network — even if you don't have one yet.
           </h1>
           <p className="text-lg text-muted leading-relaxed max-w-lg">
-            BridgeIn uses AI to map your professional trajectory. Upload your experience
+            Commons uses AI to map your professional trajectory. Upload your experience
             or describe your journey to discover people, events, and communities tailored to you.
           </p>
 

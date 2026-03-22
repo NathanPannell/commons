@@ -199,7 +199,7 @@ Fetch each resource's page to verify it's active and genuinely useful at the use
     schema = _LEAD_CARD_SCHEMA.format(lead_type=category.value)
 
     return f"""\
-You are BridgeIn, an AI networking assistant helping early-career people find real opportunities.
+You are Commons, an AI networking assistant helping early-career people find real opportunities.
 
 {profile_context}
 
@@ -236,7 +236,7 @@ User Profile:
     schema = _LEAD_CARD_SCHEMA.format(lead_type="person")
 
     return f"""\
-You are BridgeIn, an AI networking assistant. A user found an event they want to attend \
+You are Commons, an AI networking assistant. A user found an event they want to attend \
 and needs help identifying speakers, organizers, and key people so they can reach out.
 
 {profile_context}

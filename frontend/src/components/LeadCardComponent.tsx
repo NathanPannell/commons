@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { createPortal } from 'react-dom'
 import type { LeadCard, LeadType, ProfileSummary } from '../types'
 import { OutreachModal } from './OutreachModal'
 import { FindPeopleModal } from './FindPeopleModal'
@@ -110,13 +111,17 @@ export function LeadCardComponent({ card, profile }: Props) {
         )}
       </div>
 
-      {modalOpen && <OutreachModal card={card} onClose={() => setModalOpen(false)} />}
-      {findPeopleOpen && profile && (
+      {modalOpen && createPortal(
+        <OutreachModal card={card} onClose={() => setModalOpen(false)} />,
+        document.body,
+      )}
+      {findPeopleOpen && profile && createPortal(
         <FindPeopleModal
           eventCard={card}
           profile={profile}
           onClose={() => setFindPeopleOpen(false)}
-        />
+        />,
+        document.body,
       )}
     </>
   )
