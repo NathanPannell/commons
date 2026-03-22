@@ -125,18 +125,34 @@ For each result, fetch the event page and confirm:
 2. Confirm the topic and location match the user's profile.
 """,
         LeadType.PERSON: f"""\
-Find PEOPLE (practitioners, speakers, organizers, founders, hiring managers) in the user's \
-target field and location who are worth connecting with.
+Find 3-5 FOUNDERS of early-to-mid stage startups in the user's target industry and location \
+who would be valuable to connect with.
+
+"Early-to-mid stage" means: seed through Series B, typically 2-100 employees. \
+These are founders who are still hands-on, accessible, and actively building their teams.
+
+Why founders specifically:
+- They make hiring decisions directly (no HR gatekeeping)
+- They understand scrappy builders and value hustle over pedigree
+- They remember what it was like to be early-career
+- A warm intro from a founder opens doors across their network
 
 Use specific queries like these (adapt with the user's actual values):
-- "{primary_role} {primary_location} site:linkedin.com"
-- "{primary_skill} developer {primary_location} github.com"
-- "{primary_skill} speaker {primary_location} 2025 OR 2026"
-- "{primary_role} founder {primary_location}"
-- "{industries} engineer {primary_location} blog"
+- "{industries} startup founder {primary_location} site:linkedin.com"
+- "{primary_skill} startup founder {primary_location} seed OR series-a"
+- "YC founder {industries} {primary_location}"
+- "{industries} CEO founder {primary_location} startup"
+- "{primary_skill} startup {primary_location} crunchbase"
+- "site:twitter.com {industries} founder {primary_location}"
 
-For each person, fetch their profile page to confirm their role, company, and something \
-specific you can reference. Every result MUST have a verifiable public URL.
+For each founder, fetch their profile page (LinkedIn, personal site, or company About page) \
+and confirm:
+1. They are actually a founder/co-founder/CEO of a real company
+2. The company is in the user's target industry
+3. The company appears to be early-to-mid stage (check team size, funding stage, founding date)
+4. Extract something specific to reference: their product, a recent launch, a blog post, a tweet
+
+Every result MUST have a verifiable public URL (LinkedIn profile, company site, or personal site).
 """,
         LeadType.COMMUNITY: f"""\
 Find COMMUNITIES (Slack workspaces, Discord servers, Meetup groups, forums, associations) \

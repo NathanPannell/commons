@@ -17,7 +17,7 @@ export function App() {
   const [profile, setProfile] = useState<ProfileSummary | null>(MOCK ? MOCK_PROFILE : null)
   const [searchPhase, setSearchPhase] = useState<SearchPhase>(MOCK === 'search' ? 'results' : 'analyzing')
   const [intakeError, setIntakeError] = useState<string | null>(null)
-  const { cards: streamCards, statusMessage, status, error, agentStatuses, startSearch, reset } = useSearchStream()
+  const { cards: streamCards, status, error, startSearch, reset } = useSearchStream()
   const cards = MOCK === 'search' ? MOCK_CARDS : streamCards
 
   async function handleIntakeSubmit(data: IntakeFormData) {
@@ -101,10 +101,8 @@ export function App() {
             <SearchView
               profile={profile}
               cards={cards}
-              statusMessage={statusMessage}
               status={status}
               error={intakeError || error}
-              agentStatuses={agentStatuses}
               phase={searchPhase}
               onReset={handleReset}
             />
