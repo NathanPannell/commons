@@ -14,7 +14,7 @@ An AI-powered lead generation platform for job seekers. Submit your profile and 
 | Layer | Stack |
 |---|---|
 | Backend | Python, FastAPI, Uvicorn |
-| LLM | Kimi k2.5 (Moonshot API, OpenAI-compatible) |
+| LLM | Claude Haiku 4.5 (Anthropic SDK) |
 | Frontend | React 18, TypeScript, Vite, Tailwind CSS |
 | Serving | Docker, Nginx |
 
@@ -28,7 +28,7 @@ An AI-powered lead generation platform for job seekers. Submit your profile and 
 ```bash
 cp .env.example .env
 # Add your key to .env:
-# MOONSHOT_API_KEY=sk-...
+# ANTHROPIC_API_KEY=sk-...
 
 docker-compose up --build
 ```
@@ -76,4 +76,4 @@ Each search run launches five agents in parallel:
 
 | Variable | Required | Description |
 |---|---|---|
-| `MOONSHOT_API_KEY` | Yes | API key for the Kimi k2.5 model |
+| `ANTHROPIC_API_KEY` | Yes | API key for the claude-haiku-4-5 model |
