@@ -1,5 +1,7 @@
 # Commons
 
+(Won 2nd place at the Claude Builder's Club x UvicHacks Hackathon in 2026!)
+
 An AI-powered lead generation platform for job seekers. Submit your profile and target preferences, and Commons surfaces actionable leads — events, people, communities, companies, and resources — with ready-to-send outreach messages.
 
 ## How It Works
