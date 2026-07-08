@@ -1,5 +1,7 @@
 # Commons
 
+[![Commons Demo](https://img.youtube.com/vi/zDh8jt1IRP4/maxresdefault.jpg)](https://www.youtube.com/watch?v=zDh8jt1IRP4)
+
 (Won 2nd place at the Claude Builder's Club x UvicHacks Hackathon in 2026!)
 
 An AI-powered lead generation platform for job seekers. Submit your profile and target preferences, and Commons surfaces actionable leads — events, people, communities, companies, and resources — with ready-to-send outreach messages.
@@ -23,7 +25,7 @@ An AI-powered lead generation platform for job seekers. Submit your profile and 
 ## Prerequisites
 
 - Docker & Docker Compose
-- A [Moonshot API key](https://platform.moonshot.ai)
+- An Anthropic API Key
 
 ## Quick Start
 
